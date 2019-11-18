@@ -1,3 +1,3 @@
 #!/bin/bash
 
-jsonnet -J $graf dashboard.jsonnet
+jsonnet -J $graf $1
