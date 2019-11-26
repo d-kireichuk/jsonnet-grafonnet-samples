@@ -22,7 +22,7 @@ local var_datasource = var.datasource(name='datasource',query='cloudwatch',curre
 //Custom function for adding instanceId query [dynamic] variables
 local var_ec2_id = {
   attributes(var_name,aws_ec2_name_tag)::
-  variable.new(
+  var.new(
     name='ec2_id_%s' % var_name,
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name":["%s"]})' % [region, aws_ec2_name_tag],

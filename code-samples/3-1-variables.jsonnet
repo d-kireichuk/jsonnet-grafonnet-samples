@@ -7,7 +7,7 @@ local var_datasource = var.datasource(name='datasource',query='cloudwatch',curre
 
 //Query [dynamic] variables
 local var_load_controller = 
-  variable.new(
+  var.new(
     name='ec2_id_load_controller',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region, //A placeholder for aws_region.

@@ -7,7 +7,7 @@ local var_datasource = var.datasource(name='datasource',query='cloudwatch',curre
 
 //Query [dynamic] variables
 local var_ec2_id_load_controller = 
-  variable.new(
+  var.new(
     name='ec2_id_load_controller',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region,
@@ -16,7 +16,7 @@ local var_ec2_id_load_controller =
   );
 
 local var_ec2_id_load_generator_1 = 
-  variable.new(
+  var.new(
     name='ec2_id_load_generator_1',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-1-plab"]})' % aws_region,
@@ -25,7 +25,7 @@ local var_ec2_id_load_generator_1 =
   );
 
 local var_ec2_id_load_generator_2 = 
-  variable.new(
+  var.new(
     name='ec2_id_load_generator_2',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-2-plab"]})' % aws_region,
@@ -34,7 +34,7 @@ local var_ec2_id_load_generator_2 =
   );
 
 local var_ec2_id_load_generator_3 = 
-  variable.new(
+  var.new(
     name='ec2_id_load_generator_3',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-3-plab"]})' % aws_region,
@@ -43,7 +43,7 @@ local var_ec2_id_load_generator_3 =
   );
 
 local var_ec2_id_load_generator_4 = 
-  variable.new(
+  var.new(
     name='ec2_id_load_generator_4',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-4-plab"]})' % aws_region,
@@ -52,7 +52,7 @@ local var_ec2_id_load_generator_4 =
   );
 
 local var_ec2_id_load_generator_5 = 
-  variable.new(
+  var.new(
     name='ec2_id_load_generator_5',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-5-plab"]})' % aws_region,
