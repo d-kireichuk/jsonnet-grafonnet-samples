@@ -4,7 +4,7 @@ local aws_region = 'eu-west-1';
 
 /*
   Instance mapping contains properties of ec2-instance.
-    @ var_name -> variable name suffix to be displayed in grafana (e.g.: ec2_id_{var_name})
+    @ var_name -> variable name to be displayed in grafana
     @ aws_ec2_name_tag -> Tag:Name value of the instance (one can check it in AWS console).
 */
 local instance_mapping = [
@@ -31,8 +31,20 @@ local var_ec2_id = {
   )
 };
 
+local var_ec2_ami = {
+  attributes(var_name,aws_ec2_name_tag)::
+  var.new(
+    name='ec2_ami_%s' % var_name,
+    datasource='$datasource',
+    query='ec2_instance_attribute(%s,ImageId,{"tag:Name":["%s"]})' % [aws_region, aws_ec2_name_tag],
+    hide='2',
+    refresh='load',
+  )
+};
+
 //Resulting array which is imported to dashboard.jsonnet
 {
   vars: [var_datasource] +
-  [var_ec2_id.attributes(var_name=instance.var_name,aws_ec2_name_tag=instance.aws_ec2_name_tag) for instance in instance_mapping]
+  [var_ec2_id.attributes(var_name=instance.var_name,aws_ec2_name_tag=instance.aws_ec2_name_tag) for instance in instance_mapping] +
+  [var_ec2_ami.attributes(var_name=instance.var_name,aws_ec2_name_tag=instance.aws_ec2_name_tag) for instance in instance_mapping]
 }
