@@ -6,4 +6,4 @@ local variables = import '2-variables.jsonnet';
 
 //Add dashboard
 dashboard.new(title=dashboard_title,tags=dashboard_tags,editable=true,time_from='now-1h')
-.addTemplate(variables.vars)
+.addTemplates(variables.vars)
