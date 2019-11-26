@@ -11,7 +11,7 @@ local var_ec2_id_load_controller =
     name='ec2_id_load_controller',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
@@ -20,7 +20,7 @@ local var_ec2_id_load_generator_1 =
     name='ec2_id_load_generator_1',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-1-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
@@ -29,7 +29,7 @@ local var_ec2_id_load_generator_2 =
     name='ec2_id_load_generator_2',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-2-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
@@ -38,7 +38,7 @@ local var_ec2_id_load_generator_3 =
     name='ec2_id_load_generator_3',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-3-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
@@ -47,7 +47,7 @@ local var_ec2_id_load_generator_4 =
     name='ec2_id_load_generator_4',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-4-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
@@ -56,7 +56,7 @@ local var_ec2_id_load_generator_5 =
     name='ec2_id_load_generator_5',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-5-plab"]})' % aws_region,
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 

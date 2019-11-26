@@ -11,7 +11,7 @@ local var_load_controller =
     name='ec2_id_load_controller',
     datasource='$datasource',
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region, //A placeholder for aws_region.
-    hide=hide,
+    hide='2',
     refresh='load'
   );
 
