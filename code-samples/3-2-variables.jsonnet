@@ -13,7 +13,7 @@ local var_ec2_id_load_controller =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 local var_ec2_id_load_generator_1 = 
   variable.new(
@@ -22,7 +22,7 @@ local var_ec2_id_load_generator_1 =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-1-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 local var_ec2_id_load_generator_2 = 
   variable.new(
@@ -31,7 +31,7 @@ local var_ec2_id_load_generator_2 =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-2-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 local var_ec2_id_load_generator_3 = 
   variable.new(
@@ -40,7 +40,7 @@ local var_ec2_id_load_generator_3 =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-3-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 local var_ec2_id_load_generator_4 = 
   variable.new(
@@ -49,7 +49,7 @@ local var_ec2_id_load_generator_4 =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-4-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 local var_ec2_id_load_generator_5 = 
   variable.new(
@@ -58,7 +58,7 @@ local var_ec2_id_load_generator_5 =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-generator-5-plab"]})' % aws_region,
     hide=hide,
     refresh='load'
-  )
+  );
 
 //Resulting array which is imported to dashboard.jsonnet
 {

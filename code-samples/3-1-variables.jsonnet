@@ -13,7 +13,7 @@ local var_load_controller =
     query='ec2_instance_attribute(%s,InstanceId,{"tag:Name": ["ec2-d-load-controller-plab"]})' % aws_region, //A placeholder for aws_region.
     hide=hide,
     refresh='load'
-  )
+  );
 
 //Resulting array which is imported to dashboard.jsonnet
 {
