@@ -11,7 +11,7 @@ local var_ec2_id = {
   var.new(
     name='ec2_id_%s' % var_name,
     datasource='$datasource',
-    query='ec2_instance_attribute(%s,InstanceId,{"tag:Name":["%s"]})' % [region, aws_ec2_name_tag],
+    query='ec2_instance_attribute(%s,InstanceId,{"tag:Name":["%s"]})' % [aws_region, aws_ec2_name_tag],
     hide='2',
     refresh='load',
   )
