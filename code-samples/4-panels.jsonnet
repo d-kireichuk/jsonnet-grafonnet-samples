@@ -42,7 +42,6 @@ local cpu_panel = {
     legend_min=true,
     legend_max=true,
     legend_avg=true,
-    aliasColors={'CPUUtilization':'blue'},
   )
   .addTargets(
     [cw_target.attributes(
