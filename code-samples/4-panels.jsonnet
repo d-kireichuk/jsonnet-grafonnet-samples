@@ -61,7 +61,7 @@ local network_panel = {
     datasource='$datasource',
     format='bytes',
     nullPointMode='connected',
-    decimals=0,
+    decimals=1,
     legend_values=true,
     legend_alignAsTable=true,
     legend_hideEmpty=true,
@@ -84,9 +84,43 @@ local network_panel = {
   ) + {fillGradient: '7', gridPos: {h:11, w:8, x:8}},
 };
 
+//Custom function for adding DiskOps panels
+local disk_panel = {
+  attributes(instance)::
+  graphPanel.new(
+    title='Disk Ops %s' % instance,
+    datasource='$datasource',
+    format='short',
+    nullPointMode='connected',
+    decimals=1,
+    lines=false,
+    bars=true,
+    legend_values=true,
+    legend_alignAsTable=true,
+    legend_hideEmpty=true,
+    legend_min=true,
+    legend_max=true,
+    legend_avg=true,
+    aliasColors={
+      'NetworkIn': 'rgb(45, 93, 135)',
+      'NetworkOut': 'semi-dark-red',
+    }  
+  )
+  .addSeriesOverride({'alias': '/.*Read.*/', 'transform': 'negative-Y'})
+  .addTargets(
+    [cw_target.attributes(metric='EBSWriteOps',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
+      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
+    ] +
+    [cw_target.attributes(metric='EBSReadOps',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
+      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
+    ],
+  ) + {gridPos: {h:11, w:8, x:16}},
+};
+
 //Resulting array containing panels object which is imported to dashboard.jsonnet
 {
   panels: 
   [cpu_panel.attributes(group=group.group_name) for group in instance_group_mapping if group.group_lead] +
-  [network_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping]
+  [network_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping] +
+  [disk_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping]
 }
