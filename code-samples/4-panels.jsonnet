@@ -69,8 +69,8 @@ local network_panel = {
     legend_max=true,
     legend_avg=true,
     aliasColors={
-      'NetworkIn': 'rgb(45, 93, 135)',
-      'NetworkOut': 'semi-dark-red',
+      'NetworkIn': 'dark-blue',
+      'NetworkOut': 'super-light-blue',
     }  
   )
   .addSeriesOverride({'alias': '/.*Out.*/', 'transform': 'negative-Y'})
@@ -102,8 +102,8 @@ local disk_panel = {
     legend_max=true,
     legend_avg=true,
     aliasColors={
-      'NetworkIn': 'rgb(45, 93, 135)',
-      'NetworkOut': 'semi-dark-red',
+      'NetworkIn': 'dark-orange',
+      'NetworkOut': 'super-light-orange',
     }  
   )
   .addSeriesOverride({'alias': '/.*Read.*/', 'transform': 'negative-Y'})
