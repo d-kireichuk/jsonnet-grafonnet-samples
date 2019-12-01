@@ -27,7 +27,7 @@ local cw_target = {
 
 //Custom function for adding CPUUtilization panels
 local cpu_panel = {
-  attributes(group,alias='{{metric}}')::
+  attributes(group)::
   graphPanel.new(
     title='CPU %s' % group,
     datasource='$datasource',
@@ -47,7 +47,7 @@ local cpu_panel = {
     [cw_target.attributes(
       metric='CPUUtilization',
       dimensions={'InstanceId': '$ec2_id_%s' % instance.var_name_ec2_id},
-      alias=alias
+      alias=instance.aws_ec2_name_tag
       ) for instance in instance_group_mapping if instance.group_name == group
     ]
   ) + {fillGradient: '7', gridPos: {h:11, w:8}},
