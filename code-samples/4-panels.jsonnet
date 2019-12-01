@@ -59,10 +59,8 @@ local network_panel = {
   graphPanel.new(
     title='Network %s' % instance,
     datasource='$datasource',
-    format='percent',
+    format='bytes',
     nullPointMode='connected',
-    min=0,
-    max=100,
     decimals=0,
     legend_values=true,
     legend_alignAsTable=true,
@@ -83,7 +81,7 @@ local network_panel = {
     [cw_target.attributes(metric='NetworkOut',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
       alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
     ],
-  ) + {fillGradient: '7', gridPos: {h:11, w:8}},
+  ) + {fillGradient: '7', gridPos: {h:11, w:8, x:8}},
 };
 
 //Resulting array containing panels object which is imported to dashboard.jsonnet
