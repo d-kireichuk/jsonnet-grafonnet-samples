@@ -4,11 +4,6 @@ local cw = grafana.cloudwatch;
 local aws_region = 'eu-west-1';
 local period = '1m';
 
-/*
-  Instance mapping contains properties of ec2-instance.
-    @ var_name -> variable name suffix to be displayed in grafana (e.g.: ec2_id_{var_name})
-    @ aws_ec2_name_tag -> Tag:Name value of the instance (one can check it in AWS console).
-*/
 local instance_group_mapping = [
    {group_name:'load-controller',var_name_ec2_id:'load_controller',aws_ec2_name_tag:'ec2-d-load-controller-plab',group_lead: true},
    {group_name:'load-generators',var_name_ec2_id:'load_generator_1',aws_ec2_name_tag:'ec2-d-load-generator-1-plab',group_lead: true},
@@ -32,9 +27,9 @@ local cw_target = {
 
 //Custom function for adding CPUUtilization panels
 local cpu_panel = {
-  attributes(panel_name, var_name_ec2_id, alias='{{metric}}')::
+  attributes(group,alias='{{metric}}')::
   graphPanel.new(
-    title='CPU %s' % panel_name,
+    title='CPU %s' % group,
     datasource='$datasource',
     format='percent',
     nullPointMode='connected',
@@ -52,17 +47,15 @@ local cpu_panel = {
   .addTargets(
     [cw_target.attributes(
       metric='CPUUtilization',
-      dimensions={'InstanceId': 'ec2_id_%s' % var_name_ec2_id},
+      dimensions={'InstanceId': '$ec2_id_%s' % instance.var_name_ec2_id},
       alias=alias
-      )
+      ) for instance in instance_group_mapping if instance.group_name == group
     ]
   ) + {fillGradient: '7', gridPos: {h:11, w:8}},
 };
 
-
-
-//Resulting array which is imported to dashboard.jsonnet
+//Resulting array containing panels object which is imported to dashboard.jsonnet
 {
   panels: 
-  [cpu_panel.attributes(panel_name=group.aws_ec2_name_tag,var_name_ec2_id=group.var_name_ec2_id) for group in instance_group_mapping if group.group_lead]
+  [cpu_panel.attributes(group=group.group_name) for group in instance_group_mapping if group.group_lead]
 }
