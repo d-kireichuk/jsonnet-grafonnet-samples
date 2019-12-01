@@ -10,6 +10,6 @@
     {group_name:'load-generators',var_name_ec2_id:'load_generator_2',instance_name:'ec2-d-load-generator-2-plab',group_lead: false},
     {group_name:'load-generators',var_name_ec2_id:'load_generator_3',instance_name:'ec2-d-load-generator-3-plab',group_lead: false},
     {group_name:'load-generators',var_name_ec2_id:'load_generator_4',instance_name:'ec2-d-load-generator-4-plab',group_lead: false},
-    {group_name:'load-generators',var_name_ec2_id:'load_generator_5',instance_name:'ec2-d-load-generator-5-plab',group_lead: false}
-  ];
+    {group_name:'load-generators',var_name_ec2_id:'load_generator_5',instance_name:'ec2-d-load-generator-5-plab',group_lead: false},
+  ]
 }
