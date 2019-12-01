@@ -102,8 +102,8 @@ local disk_panel = {
     legend_max=true,
     legend_avg=true,
     aliasColors={
-      'NetworkIn': 'dark-orange',
-      'NetworkOut': 'super-light-orange',
+      'EBSWriteOps': 'dark-orange',
+      'EBSReadOps': 'super-light-orange',
     }  
   )
   .addSeriesOverride({'alias': '/.*Read.*/', 'transform': 'negative-Y'})
