@@ -77,12 +77,12 @@ local network_panel = {
   )
   .addSeriesOverride({'alias': '/.*Out.*/', 'transform': 'negative-Y'})
   .addTargets(
-    [cw_target.attributes(
-      metric='CPUUtilization',
-      dimensions={'InstanceId': '$ec2_id_%s' % instance.var_name_ec2_id},
-      alias='{{metric}}'
-      ) for instance in instance_group_mapping if instance.instance_name == instance
-    ]
+    [cw_target.attributes(metric='NetworkIn',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
+      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
+    ] +
+    [cw_target.attributes(metric='NetworkOut',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
+      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
+    ],
   ) + {fillGradient: '7', gridPos: {h:11, w:8}},
 };
 
