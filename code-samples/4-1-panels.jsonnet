@@ -1,10 +1,17 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
-local mapping = import '4-instance-mapping.jsonnet';
-local instance_group_mapping = mapping.instance_group_mapping;
 local graphPanel = grafana.graphPanel;
 local cw = grafana.cloudwatch;
 local aws_region = 'eu-west-1';
 local period = '1m';
+
+local instance_group_mapping = [
+   {group_name:'load-controller',var_name_ec2_id:'load_controller',instance_name:'ec2-d-load-controller-plab',group_lead: true},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_1',instance_name:'ec2-d-load-generator-1-plab',group_lead: true},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_2',instance_name:'ec2-d-load-generator-2-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_3',instance_name:'ec2-d-load-generator-3-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_4',instance_name:'ec2-d-load-generator-4-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_5',instance_name:'ec2-d-load-generator-5-plab',group_lead: false}
+];
 
 local cw_target = {
   attributes(alias,metric,namespace='AWS/EC2',dimensions)::
