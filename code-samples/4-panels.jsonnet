@@ -5,12 +5,12 @@ local aws_region = 'eu-west-1';
 local period = '1m';
 
 local instance_group_mapping = [
-   {group_name:'load-controller',var_name_ec2_id:'load_controller',aws_ec2_name_tag:'ec2-d-load-controller-plab',group_lead: true},
-   {group_name:'load-generators',var_name_ec2_id:'load_generator_1',aws_ec2_name_tag:'ec2-d-load-generator-1-plab',group_lead: true},
-   {group_name:'load-generators',var_name_ec2_id:'load_generator_2',aws_ec2_name_tag:'ec2-d-load-generator-2-plab',group_lead: false},
-   {group_name:'load-generators',var_name_ec2_id:'load_generator_3',aws_ec2_name_tag:'ec2-d-load-generator-3-plab',group_lead: false},
-   {group_name:'load-generators',var_name_ec2_id:'load_generator_4',aws_ec2_name_tag:'ec2-d-load-generator-4-plab',group_lead: false},
-   {group_name:'load-generators',var_name_ec2_id:'load_generator_5',aws_ec2_name_tag:'ec2-d-load-generator-5-plab',group_lead: false}
+   {group_name:'load-controller',var_name_ec2_id:'load_controller',instance_name:'ec2-d-load-controller-plab',group_lead: true},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_1',instance_name:'ec2-d-load-generator-1-plab',group_lead: true},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_2',instance_name:'ec2-d-load-generator-2-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_3',instance_name:'ec2-d-load-generator-3-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_4',instance_name:'ec2-d-load-generator-4-plab',group_lead: false},
+   {group_name:'load-generators',var_name_ec2_id:'load_generator_5',instance_name:'ec2-d-load-generator-5-plab',group_lead: false}
 ];
 
 local cw_target = {
@@ -47,8 +47,41 @@ local cpu_panel = {
     [cw_target.attributes(
       metric='CPUUtilization',
       dimensions={'InstanceId': '$ec2_id_%s' % instance.var_name_ec2_id},
-      alias=instance.aws_ec2_name_tag
+      alias=instance.instance_name
       ) for instance in instance_group_mapping if instance.group_name == group
+    ]
+  ) + {fillGradient: '7', gridPos: {h:11, w:8}},
+};
+
+//Custom function for adding Networking panels
+local network_panel = {
+  attributes(instance)::
+  graphPanel.new(
+    title='Network %s' % instance,
+    datasource='$datasource',
+    format='percent',
+    nullPointMode='connected',
+    min=0,
+    max=100,
+    decimals=0,
+    legend_values=true,
+    legend_alignAsTable=true,
+    legend_hideEmpty=true,
+    legend_min=true,
+    legend_max=true,
+    legend_avg=true,
+    aliasColors={
+      'NetworkIn': 'rgb(45, 93, 135)',
+      'NetworkOut': 'semi-dark-red',
+    }  
+  )
+  .addSeriesOverride({'alias': '/.*Out.*/', 'transform': 'negative-Y'})
+  .addTargets(
+    [cw_target.attributes(
+      metric='CPUUtilization',
+      dimensions={'InstanceId': '$ec2_id_%s' % instance.var_name_ec2_id},
+      alias='{{metric}}'
+      ) for instance in instance_group_mapping if instance.instance_name == instance
     ]
   ) + {fillGradient: '7', gridPos: {h:11, w:8}},
 };
@@ -56,5 +89,6 @@ local cpu_panel = {
 //Resulting array containing panels object which is imported to dashboard.jsonnet
 {
   panels: 
-  [cpu_panel.attributes(group=group.group_name) for group in instance_group_mapping if group.group_lead]
+  [cpu_panel.attributes(group=group.group_name) for group in instance_group_mapping if group.group_lead] +
+  [network_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping]
 }
