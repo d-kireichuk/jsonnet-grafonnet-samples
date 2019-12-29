@@ -5,6 +5,8 @@ local graphPanel = grafana.graphPanel;
 local cw = grafana.cloudwatch;
 local aws_region = 'eu-west-1';
 local period = '1m';
+local network_metrics = ['NetworkIn', 'NetworkOut'];
+local disk_metrics = ['EBSWriteOps', 'EBSReadOps'];
 
 local cw_target = {
   attributes(alias,metric,namespace='AWS/EC2',dimensions)::
@@ -43,14 +45,18 @@ local cpu_panel = {
       alias=instance.instance_name
       ) for instance in instance_group_mapping if instance.group_name == group
     ]
-  ) + {fillGradient: '7', gridPos: {h:11, w:8}},
+  ) +
+  {
+    fillGradient: '7',
+    gridPos: {h:11, w:8}
+  },
 };
 
 //Custom function for adding Networking panels
 local network_panel = {
-  attributes(instance)::
+  attributes(instance_name, var_name)::
   graphPanel.new(
-    title='Network %s' % instance,
+    title='Network %s' % instance_name,
     datasource='$datasource',
     format='bytes',
     nullPointMode='connected',
@@ -68,20 +74,17 @@ local network_panel = {
   )
   .addSeriesOverride({'alias': '/.*Out.*/', 'transform': 'negative-Y'})
   .addTargets(
-    [cw_target.attributes(metric='NetworkIn',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
-      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
-    ] +
-    [cw_target.attributes(metric='NetworkOut',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
-      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
-    ],
+    [cw_target.attributes(metric='%s' % metric,dimensions={'InstanceId': '$ec2_id_%s' % var_name},
+      alias='{{metric}}') for metric in network_metrics
+    ]
   ) + {fillGradient: '7', gridPos: {h:11, w:8, x:8}},
 };
 
 //Custom function for adding DiskOps panels
 local disk_panel = {
-  attributes(instance)::
+  attributes(instance_name, var_name)::
   graphPanel.new(
-    title='Disk Ops %s' % instance,
+    title='Disk Ops %s' % instance_name,
     datasource='$datasource',
     format='short',
     nullPointMode='connected',
@@ -101,12 +104,9 @@ local disk_panel = {
   )
   .addSeriesOverride({'alias': '/.*Read.*/', 'transform': 'negative-Y'})
   .addTargets(
-    [cw_target.attributes(metric='EBSWriteOps',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
-      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
-    ] +
-    [cw_target.attributes(metric='EBSReadOps',dimensions={'InstanceId': '$ec2_id_%s' % ec2_instance.var_name_ec2_id},
-      alias='{{metric}}') for ec2_instance in instance_group_mapping if ec2_instance.instance_name == instance
-    ],
+    [cw_target.attributes(metric='%s' % metric,dimensions={'InstanceId': '$ec2_id_%s' % var_name},
+      alias='{{metric}}') for metric in disk_metrics
+    ]
   ) + {gridPos: {h:11, w:8, x:16}},
 };
 
@@ -114,6 +114,6 @@ local disk_panel = {
 {
   panels: 
   [cpu_panel.attributes(group=group.group_name) for group in instance_group_mapping if group.group_lead] +
-  [network_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping] +
-  [disk_panel.attributes(instance=instance.instance_name) for instance in instance_group_mapping]
+  [network_panel.attributes(instance_name=instance.instance_name,var_name=instance.var_name_ec2_id) for instance in instance_group_mapping] +
+  [disk_panel.attributes(instance_name=instance.instance_name,var_name=instance.var_name_ec2_id) for instance in instance_group_mapping]
 }
